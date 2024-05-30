@@ -1,7 +1,7 @@
 # https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/container_cluster
 resource "google_container_cluster" "gke-cluster-prod" {
   name                     = "gke-cluster-prod"
-  location                 = "us-central1-a"
+  location                 = "us-central1-c"
   remove_default_node_pool = true
   initial_node_count       = 1
   network                  = "k8s-vpc"
@@ -14,7 +14,8 @@ resource "google_container_cluster" "gke-cluster-prod" {
   deletion_protection = false
   # Optional, if you want multi-zonal cluster
   node_locations = [
-    "us-central1-a"
+    "us-central1-a",  # Secondary zone
+    "us-central1-b"   # Another secondary zone
   ]
 
   addons_config {

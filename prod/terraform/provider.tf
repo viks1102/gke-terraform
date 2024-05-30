@@ -6,7 +6,7 @@ terraform {
     }
   }
   backend "gcs" {
-    prefix = "state/gke"
+    prefix = "state/gke/prod"
     bucket = "k8s-bucket-tfstate-rand"
   }
 }
