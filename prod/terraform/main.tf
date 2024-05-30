@@ -5,7 +5,7 @@ resource "google_container_cluster" "gke-cluster-prod" {
   remove_default_node_pool = true
   initial_node_count       = 1
   network                  = "k8s-vpc-global"
-  subnetwork               = google_compute_subnetwork.private.self_link
+  subnetwork               = google_compute_subnetwork.private2.self_link
   logging_service          = "logging.googleapis.com/kubernetes"
   monitoring_service       = "monitoring.googleapis.com/kubernetes"
   networking_mode          = "VPC_NATIVE"
@@ -36,8 +36,8 @@ resource "google_container_cluster" "gke-cluster-prod" {
   }
 
   ip_allocation_policy {
-    cluster_secondary_range_name  = "10.48.0.0/14"
-    services_secondary_range_name = "10.52.0.0/20"
+    cluster_secondary_range_name  = google_compute_subnetwork.private2.secondary_ip_range["k8s-pod-range"].self_link
+    services_secondary_range_name = google_compute_subnetwork.private2.secondary_ip_range["k8s-service-range"].self_link
   }
 
   private_cluster_config {
