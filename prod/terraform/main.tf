@@ -36,8 +36,8 @@ resource "google_container_cluster" "gke-cluster-prod" {
   }
 
   ip_allocation_policy {
-    cluster_secondary_range_name  = google_compute_subnetwork.private2.secondary_ip_range["k8s-pod-range"].self_link
-    services_secondary_range_name = google_compute_subnetwork.private2.secondary_ip_range["k8s-service-range"].self_link
+    cluster_secondary_range_name  = "k8s-pod-range"
+    services_secondary_range_name = "k8s-service-range"
   }
 
   private_cluster_config {
