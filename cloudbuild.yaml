@@ -312,7 +312,6 @@ steps:
   # Apply Terraform in Nonprod with manual approval
   - name: 'gcr.io/cloud-builders/gcloud'
     args:
-      - 'alpha'
       - 'builds'
       - 'approve'
       - '${BUILD_ID}'
@@ -349,7 +348,6 @@ steps:
   # Apply Terraform in Prod with manual approval
   - name: 'gcr.io/cloud-builders/gcloud'
     args:
-      - 'alpha'
       - 'builds'
       - 'approve'
       - '${BUILD_ID}'
