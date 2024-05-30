@@ -5,7 +5,7 @@ resource "google_container_cluster" "gke-cluster-prod" {
   remove_default_node_pool = true
   initial_node_count       = 1
   network                  = "k8s-vpc-global"
-  subnetwork               = "private"
+  subnetwork               = google_compute_subnetwork.private.self_link
   logging_service          = "logging.googleapis.com/kubernetes"
   monitoring_service       = "monitoring.googleapis.com/kubernetes"
   networking_mode          = "VPC_NATIVE"
