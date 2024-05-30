@@ -1,6 +1,6 @@
 # https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/google_service_account
 resource "google_service_account" "kubernetes" {
-  account_id = "kubernetes-demo"
+  account_id = "k8s-data-tonic-prod"
 }
 
 resource "google_container_node_pool" "prod" {
