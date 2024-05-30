@@ -15,7 +15,7 @@ resource "google_container_cluster" "gke-cluster-nonprod" {
   # Optional, if you want multi-zonal cluster
   node_locations = [
     "us-central1-c",  # Secondary zone
-    "us-central1-f"   # Another secondary zone
+    # "us-central1-f"   # Another secondary zone
   ]
 
   addons_config {

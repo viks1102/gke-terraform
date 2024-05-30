@@ -14,7 +14,7 @@ resource "google_container_cluster" "gke-cluster-prod" {
   deletion_protection = false
   # Optional, if you want multi-zonal cluster
   node_locations = [
-    "us-central1-a",  # Secondary zone
+    # "us-central1-a",  # Secondary zone
     "us-central1-b"   # Another secondary zone
   ]
 
