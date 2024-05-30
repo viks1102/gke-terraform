@@ -142,7 +142,7 @@ steps:
         else
           echo "Branch is not main, skipping Terraform apply."
         fi
-    id: Terraform Apply
+    id: Terraform Apply Prod
     entrypoint: sh
 
 options:
