@@ -45,6 +45,20 @@ resource "google_container_cluster" "gke-cluster-prod" {
     enable_private_endpoint = false
     master_ipv4_cidr_block  = "172.16.0.0/28"
   }
+  
+  node_config {
+    disk_type = "pd-ssd"   # Specify SSD type
+    disk_size_gb = 50      # Specify disk size to fit within your quota
 
+    oauth_scopes = [
+      "https://www.googleapis.com/auth/logging.write",
+      "https://www.googleapis.com/auth/monitoring",
+      "https://www.googleapis.com/auth/devstorage.read_write"
+    ]
+
+    metadata = {
+      disable-legacy-endpoints = "true"
+    }
+  }
 
 }
