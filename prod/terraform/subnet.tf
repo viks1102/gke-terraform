@@ -2,7 +2,7 @@
 resource "google_compute_subnetwork" "private2" {
   name                     = "private2"
   ip_cidr_range            = "10.60.0.0/20"
-  region                   = "us-central1"
+  region                   = "us-east1"
   network                  = "k8s-vpc-global"
   private_ip_google_access = true
 
