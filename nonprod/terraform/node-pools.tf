@@ -19,7 +19,7 @@ resource "google_container_node_pool" "dev" {
 
   node_config {
     preemptible  = false
-    machine_type = "e2-small"
+    machine_type = "e2-medium"
 
     labels = {
       team = "dev"
