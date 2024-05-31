@@ -31,3 +31,16 @@ resource "google_container_node_pool" "prod" {
     ]
   }
 }
+# Bind the Artifact Registry Reader role to the service account
+resource "google_project_iam_member" "artifact_registry_reader" {
+  project = "dtonic-demo-k8s"
+  role    = "roles/artifactregistry.reader"
+  member  = "serviceAccount:${google_service_account.kubernetes.email}"
+}
+
+# Bind the Storage Object Viewer role to the service account
+resource "google_project_iam_member" "storage_object_viewer" {
+  project = "dtonic-demo-k8s"
+  role    = "roles/storage.objectViewer"
+  member  = "serviceAccount:${google_service_account.kubernetes.email}"
+}
