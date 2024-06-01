@@ -23,7 +23,7 @@ resource "google_container_cluster" "gke-cluster-prod" {
       disabled = true
     }
     horizontal_pod_autoscaling {
-      disabled = false
+      disabled = true
     }
   }
 
