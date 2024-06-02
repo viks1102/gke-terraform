@@ -63,6 +63,19 @@ steps:
         ls -lrth /workspace/gke-terraform/nonprod/terraform
     entrypoint: sh  
 
+  # Get GKE cluster credentials
+  - name: 'gcr.io/cloud-builders/gcloud'
+    args:
+      - 'container'
+      - 'clusters'
+      - 'get-credentials'
+      - '${_CLUSTER_NAME}'
+      - '--zone'
+      - '${_CLUSTER_ZONE}'
+      - '--project'
+      - '${_PROJECT_ID}'
+    id: 'Get GKE Credentials'
+  
   # Initialize Terraform in Nonprod
   - name: 'hashicorp/terraform:1.0.0'
     args:
@@ -103,6 +116,8 @@ steps:
         fi
     id: Terraform Apply
     entrypoint: sh
+
+    
 
   # # Initialize Terraform in Prod
   # - name: 'hashicorp/terraform:1.0.0'
@@ -147,6 +162,11 @@ steps:
 
 options:
   logging: CLOUD_LOGGING_ONLY
+
+substitutions:
+  _CLUSTER_NAME: 'gke-cluster-nonprod'
+  _CLUSTER_ZONE: 'us-central1-b'
+  _PROJECT_ID: 'dtonic-demo-k8s'
 
 # ##########
 
