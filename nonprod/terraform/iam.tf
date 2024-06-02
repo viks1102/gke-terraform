@@ -20,3 +20,12 @@ resource "google_project_iam_binding" "workload_identity_user" {
     "serviceAccount:${var.project_id}.svc.id.goog[${var.namespace}/${var.service_account_name}]"
   ]
 }
+
+# Grant the roles/cloudsql.client role to the service account
+resource "google_project_iam_binding" "cloudsql_client_role_binding" {
+  project = var.project_id
+  role    = ["roles/cloudsql.client", "roles/logging.logWriter"]
+  members = [
+    "serviceAccount:${google_service_account.gsa.email}"
+  ]
+}
