@@ -83,7 +83,7 @@ steps:
       - |
         cd /workspace/gke-terraform/nonprod/terraform
         echo "Running terraform plan for Nonprod"
-        terraform plan -out=tfplan
+        terraform plan -out=tfplan -lock=false
         echo "Listing contents after terraform plan for Nonprod:"
         ls -lrth
     id: Terraform Plan Nonprod
@@ -97,7 +97,7 @@ steps:
         cd /workspace/gke-terraform/nonprod/terraform
         if [ "$BRANCH_NAME" == "main" ]; then
           echo "Branch is main, applying Terraform plan."
-          terraform apply -input=false tfplan
+          terraform apply -input=false tfplan 
         else
           echo "Branch is not main, skipping Terraform apply."
         fi
