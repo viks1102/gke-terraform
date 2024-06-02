@@ -8,7 +8,7 @@ output "google_service_account_email" {
   value       = google_service_account.gsa.email
 }
 
-output "gke_cluster_name" {
-  description = "The name of the GKE cluster"
-  value       = google_container_cluster.primary.name
-}
+# output "gke_cluster_name" {
+#   description = "The name of the GKE cluster"
+#   value       = google_container_cluster.primary.name
+# }
