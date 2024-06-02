@@ -9,7 +9,7 @@ resource "kubernetes_service_account" "k8s_service_account" {
 }
 
 resource "google_service_account" "gsa" {
-  account_id   = var.service_account_name
+  account_id   = "ksa-${var.service_account_name}"
   display_name = "GKE Workload Identity Service Account"
 }
 
