@@ -91,18 +91,17 @@ steps:
 
   # Apply Terraform in Nonprod
   - name: 'hashicorp/terraform:1.0.0'
-    args:
+    args: 
       - '-c'
       - |
         cd /workspace/gke-terraform/nonprod/terraform
         if [ "$BRANCH_NAME" == "main" ]; then
           echo "Branch is main, applying Terraform plan."
-      # terraform apply -input=false tfplan -lock=false
-          terraform apply -auto-approve -lock=false
+          terraform apply -auto-approve -lock=false tfplan
         else
           echo "Branch is not main, skipping Terraform apply."
         fi
-    id: Terraform Apply
+    id: Terraform Apply Nonprod
     entrypoint: sh
 
     
