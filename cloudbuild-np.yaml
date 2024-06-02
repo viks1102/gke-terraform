@@ -97,7 +97,8 @@ steps:
         cd /workspace/gke-terraform/nonprod/terraform
         if [ "$BRANCH_NAME" == "main" ]; then
           echo "Branch is main, applying Terraform plan."
-          terraform apply -input=false tfplan -lock=false
+      # terraform apply -input=false tfplan -lock=false
+          terraform apply -auto-approve -lock=false
         else
           echo "Branch is not main, skipping Terraform apply."
         fi
