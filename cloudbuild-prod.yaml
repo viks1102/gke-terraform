@@ -63,46 +63,46 @@ steps:
         ls -lrth /workspace/gke-terraform/nonprod/terraform
     entrypoint: sh  
 
-  # Initialize Terraform in Nonprod
-  - name: 'hashicorp/terraform:1.0.0'
-    args:
-      - '-c'
-      - |
-        cd /workspace/gke-terraform/nonprod/terraform
-        echo "Running terraform init for Nonprod"
-        terraform init -reconfigure
-        echo "Listing contents after terraform init for Nonprod:"
-        ls -lrth
-    id: Terraform Init Nonprod
-    entrypoint: sh
+  # # Initialize Terraform in Nonprod
+  # - name: 'hashicorp/terraform:1.0.0'
+  #   args:
+  #     - '-c'
+  #     - |
+  #       cd /workspace/gke-terraform/nonprod/terraform
+  #       echo "Running terraform init for Nonprod"
+  #       terraform init -reconfigure
+  #       echo "Listing contents after terraform init for Nonprod:"
+  #       ls -lrth
+  #   id: Terraform Init Nonprod
+  #   entrypoint: sh
 
-  # Plan Terraform in Nonprod
-  - name: 'hashicorp/terraform:1.0.0'
-    args:
-      - '-c'
-      - |
-        cd /workspace/gke-terraform/nonprod/terraform
-        echo "Running terraform plan for Nonprod"
-        terraform plan -out=tfplan
-        echo "Listing contents after terraform plan for Nonprod:"
-        ls -lrth
-    id: Terraform Plan Nonprod
-    entrypoint: sh
+  # # Plan Terraform in Nonprod
+  # - name: 'hashicorp/terraform:1.0.0'
+  #   args:
+  #     - '-c'
+  #     - |
+  #       cd /workspace/gke-terraform/nonprod/terraform
+  #       echo "Running terraform plan for Nonprod"
+  #       terraform plan -out=tfplan
+  #       echo "Listing contents after terraform plan for Nonprod:"
+  #       ls -lrth
+  #   id: Terraform Plan Nonprod
+  #   entrypoint: sh
 
-  # Apply Terraform in Nonprod
-  - name: 'hashicorp/terraform:1.0.0'
-    args:
-      - '-c'
-      - |
-        cd /workspace/gke-terraform/nonprod/terraform
-        if [ "$BRANCH_NAME" == "main" ]; then
-          echo "Branch is main, applying Terraform plan."
-          terraform apply -input=false tfplan
-        else
-          echo "Branch is not main, skipping Terraform apply."
-        fi
-    id: Terraform Apply
-    entrypoint: sh
+  # # Apply Terraform in Nonprod
+  # - name: 'hashicorp/terraform:1.0.0'
+  #   args:
+  #     - '-c'
+  #     - |
+  #       cd /workspace/gke-terraform/nonprod/terraform
+  #       if [ "$BRANCH_NAME" == "main" ]; then
+  #         echo "Branch is main, applying Terraform plan."
+  #         terraform apply -input=false tfplan
+  #       else
+  #         echo "Branch is not main, skipping Terraform apply."
+  #       fi
+  #   id: Terraform Apply
+  #   entrypoint: sh
 
   # Initialize Terraform in Prod
   - name: 'hashicorp/terraform:1.0.0'

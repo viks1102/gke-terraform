@@ -1,7 +1,7 @@
 # https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/container_cluster
 resource "google_container_cluster" "gke-cluster-nonprod" {
-  name                     = "gke-cluster-nonprod"
-  location                 = "us-central1-b"
+  name                     = var.cluster_name
+  location                 = var.region
   remove_default_node_pool = true
   initial_node_count       = 1
   network                  = google_compute_network.main.self_link
@@ -14,7 +14,7 @@ resource "google_container_cluster" "gke-cluster-nonprod" {
   deletion_protection = false
   # Optional, if you want multi-zonal cluster
   node_locations = [
-    "us-central1-c",  # Secondary zone
+    var.zone,  # Secondary zone
     # "us-central1-f"   # Another secondary zone
   ]
 
@@ -32,7 +32,7 @@ resource "google_container_cluster" "gke-cluster-nonprod" {
   }
 
   workload_identity_config {
-    workload_pool = "dtonic-demo-k8s.svc.id.goog"
+    identity_namespace = "${var.project_id}.svc.id.goog"
   }
 
   ip_allocation_policy {
@@ -61,11 +61,32 @@ resource "google_container_cluster" "gke-cluster-nonprod" {
     }
   }
 
-  #   Jenkins use case
-  #   master_authorized_networks_config {
-  #     cidr_blocks {
-  #       cidr_block   = "10.0.0.0/18"
-  #       display_name = "private-subnet-w-jenkins"
-  #     }
-  #   }
 }
+
+resource "kubernetes_namespace" "default" {
+  metadata {
+    name = var.namespace
+  }
+}
+
+# resource "kubernetes_service_account" "my_service_account" {
+#   metadata {
+#     name      = var.service_account_name
+#     namespace = kubernetes_namespace.default.metadata[0].name
+#     annotations = {
+#       "iam.gke.io/gcp-service-account" = google_service_account.gsa.email
+#     }
+#   }
+# }
+
+# resource "google_service_account" "gsa" {
+#   account_id   = var.service_account_name
+#   display_name = "GKE Workload Identity Service Account"
+# }
+
+# resource "google_project_iam_binding" "workload_identity_user" {
+#   role    = "roles/iam.workloadIdentityUser"
+#   members = [
+#     "serviceAccount:${var.project_id}.svc.id.goog[${var.namespace}/${var.service_account_name}]"
+#   ]
+# }

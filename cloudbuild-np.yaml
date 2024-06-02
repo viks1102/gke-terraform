@@ -1,0 +1,267 @@
+# # steps:
+# #   - id : 'cloning repo'
+# #     name: gcr.io/cloud-builders/git
+# #     args:
+# #       - clone
+# #       - 'https://github.com/viks1102/gke-terraform.git'
+# #     dir: /workspace
+# #     id: Clone Repository
+
+# #   - id : 'tf init'   
+# #     name: 'hashicorp/terraform:1.0.0'
+# #     args:
+# #       - '-c'
+# #       - |
+# #         cd /workspace/gke-terraform/nonprod/terraform
+# #         terraform init
+# #     id: Terraform Init
+# #     entrypoint: sh
+
+# #   - id : 'tf plan'   
+# #     name: 'hashicorp/terraform:1.0.0'
+# #     args:
+# #       - '-c'
+# #       - |
+# #         cd /workspace/gke-terraform/nonprod/terraform
+# #         terraform plan -out=tfplan
+# #     id: Terraform Plan
+# #     entrypoint: sh
+
+# #   - id : 'tf apply'    
+# #     name: 'hashicorp/terraform:1.0.0'
+# #     args:
+# #       - '-c'
+# #       - |
+# #         cd /workspace/gke-terraform/nonprod/terraform
+# #         if [ "$BRANCH_NAME" == "main" ]; then
+# #           echo "Branch is main, applying Terraform plan."
+# #           terraform apply -input=false tfplan
+# #         else
+# #           echo "Branch is not main, skipping Terraform apply."
+# #         fi
+# #     id: Terraform Apply
+# #     entrypoint: sh
+# # options:
+# #   logging: CLOUD_LOGGING_ONLY
+
+# #################################
+
+steps:
+  - name: gcr.io/cloud-builders/git
+    args:
+      - clone
+      - 'https://github.com/viks1102/gke-terraform.git'
+    dir: /workspace
+
+  - name: 'gcr.io/cloud-builders/git'
+    args: 
+      - '-c'
+      - |
+        echo "Listing contents of /workspace after cloning:"
+        ls -lrth /workspace
+        echo "Listing contents of /workspace/gke-terraform:"
+        ls -lrth /workspace/gke-terraform/nonprod/terraform
+    entrypoint: sh  
+
+  # Initialize Terraform in Nonprod
+  - name: 'hashicorp/terraform:1.0.0'
+    args:
+      - '-c'
+      - |
+        cd /workspace/gke-terraform/nonprod/terraform
+        echo "Running terraform init for Nonprod"
+        terraform init -reconfigure
+        echo "Listing contents after terraform init for Nonprod:"
+        ls -lrth
+    id: Terraform Init Nonprod
+    entrypoint: sh
+
+  # Plan Terraform in Nonprod
+  - name: 'hashicorp/terraform:1.0.0'
+    args:
+      - '-c'
+      - |
+        cd /workspace/gke-terraform/nonprod/terraform
+        echo "Running terraform plan for Nonprod"
+        terraform plan -out=tfplan
+        echo "Listing contents after terraform plan for Nonprod:"
+        ls -lrth
+    id: Terraform Plan Nonprod
+    entrypoint: sh
+
+  # Apply Terraform in Nonprod
+  - name: 'hashicorp/terraform:1.0.0'
+    args:
+      - '-c'
+      - |
+        cd /workspace/gke-terraform/nonprod/terraform
+        if [ "$BRANCH_NAME" == "main" ]; then
+          echo "Branch is main, applying Terraform plan."
+          terraform apply -input=false tfplan
+        else
+          echo "Branch is not main, skipping Terraform apply."
+        fi
+    id: Terraform Apply
+    entrypoint: sh
+
+  # # Initialize Terraform in Prod
+  # - name: 'hashicorp/terraform:1.0.0'
+  #   args:
+  #     - '-c'
+  #     - |
+  #       cd /workspace/gke-terraform/prod/terraform
+  #       echo "Running terraform init for Prod"
+  #       terraform init -reconfigure
+  #       echo "Listing contents after terraform init for Prod:"
+  #       ls -lrth
+  #   id: Terraform Init Prod
+  #   entrypoint: sh
+
+  # # Plan Terraform in Prod
+  # - name: 'hashicorp/terraform:1.0.0'
+  #   args:
+  #     - '-c'
+  #     - |
+  #       cd /workspace/gke-terraform/prod/terraform
+  #       echo "Running terraform plan for Prod"
+  #       terraform plan -out=tfplan
+  #       echo "Listing contents after terraform plan for Prod:"
+  #       ls -lrth
+  #   id: Terraform Plan Prod
+  #   entrypoint: sh
+
+  # # Apply Terraform in Prod
+  # - name: 'hashicorp/terraform:1.0.0'
+  #   args:
+  #     - '-c'
+  #     - |
+  #       cd /workspace/gke-terraform/prod/terraform
+  #       if [ "$BRANCH_NAME" == "main" ]; then
+  #         echo "Branch is main, applying Terraform plan."
+  #         terraform apply -input=false tfplan
+  #       else
+  #         echo "Branch is not main, skipping Terraform apply."
+  #       fi
+  #   id: Terraform Apply Prod
+  #   entrypoint: sh
+
+options:
+  logging: CLOUD_LOGGING_ONLY
+
+# ##########
+
+# steps:
+#   - name: gcr.io/cloud-builders/git
+#     args:
+#       - clone
+#       - 'https://github.com/viks1102/gke-terraform.git'
+#     dir: /workspace
+
+#   - name: 'gcr.io/cloud-builders/git'
+#     args: 
+#       - '-c'
+#       - |
+#         echo "Listing contents of /workspace after cloning:"
+#         ls -lrth /workspace
+#         echo "Listing contents of /workspace/gke-terraform:"
+#         ls -lrth /workspace/gke-terraform/nonprod/terraform
+#     entrypoint: sh  
+
+#   # Initialize Terraform in Nonprod
+#   - name: 'hashicorp/terraform:1.0.0'
+#     args:
+#       - '-c'
+#       - |
+#         cd /workspace/gke-terraform/nonprod/terraform
+#         echo "Running terraform init for Nonprod"
+#         terraform init -reconfigure
+#         echo "Listing contents after terraform init for Nonprod:"
+#         ls -lrth
+#     id: Terraform Init Nonprod
+#     entrypoint: sh
+
+#   # Plan Terraform in Nonprod
+#   - name: 'hashicorp/terraform:1.0.0'
+#     args:
+#       - '-c'
+#       - |
+#         cd /workspace/gke-terraform/nonprod/terraform
+#         echo "Running terraform plan for Nonprod"
+#         terraform plan -out=tfplan
+#         echo "Listing contents after terraform plan for Nonprod:"
+#         ls -lrth
+#     id: Terraform Plan Nonprod
+#     entrypoint: sh
+
+#   # Manual approval for Nonprod
+#   - name: 'gcr.io/cloud-builders/gcloud'
+#     args: ['-c', 'echo "Awaiting approval for Nonprod Terraform apply"']
+#     waitFor: ['Terraform Plan Nonprod']
+#     id: Approval Nonprod
+
+#   # Apply Terraform in Nonprod
+#   - name: 'hashicorp/terraform:1.0.0'
+#     args:
+#       - '-c'
+#       - |
+#         cd /workspace/gke-terraform/nonprod/terraform
+#         if [ "$BRANCH_NAME" == "main" ]; then
+#           echo "Branch is main, applying Terraform plan."
+#           terraform apply -input=false tfplan
+#         else
+#           echo "Branch is not main, skipping Terraform apply."
+#         fi
+#     id: Terraform Apply Nonprod
+#     entrypoint: sh
+#     waitFor: ['Approval Nonprod']
+
+#   # Initialize Terraform in Prod
+#   - name: 'hashicorp/terraform:1.0.0'
+#     args:
+#       - '-c'
+#       - |
+#         cd /workspace/gke-terraform/prod/terraform
+#         echo "Running terraform init for Prod"
+#         terraform init -reconfigure
+#         echo "Listing contents after terraform init for Prod:"
+#         ls -lrth
+#     id: Terraform Init Prod
+#     entrypoint: sh
+
+#   # Plan Terraform in Prod
+#   - name: 'hashicorp/terraform:1.0.0'
+#     args:
+#       - '-c'
+#       - |
+#         cd /workspace/gke-terraform/prod/terraform
+#         echo "Running terraform plan for Prod"
+#         terraform plan -out=tfplan
+#         echo "Listing contents after terraform plan for Prod:"
+#         ls -lrth
+#     id: Terraform Plan Prod
+#     entrypoint: sh
+
+#   # Manual approval for Prod
+#   - name: 'gcr.io/cloud-builders/gcloud'
+#     args: ['-c', 'echo "Awaiting approval for Prod Terraform apply"']
+#     waitFor: ['Terraform Plan Prod']
+#     id: Approval Prod
+
+#   # Apply Terraform in Prod
+#   - name: 'hashicorp/terraform:1.0.0'
+#     args:
+#       - '-c'
+#       - |
+#         cd /workspace/gke-terraform/prod/terraform
+#         if [ "$BRANCH_NAME" == "main" ]; then
+#           echo "Branch is main, applying Terraform plan."
+#           terraform apply -input=false tfplan
+#         else
+#           echo "Branch is not main, skipping Terraform apply."
+#         fi
+#     id: Terraform Apply Prod
+#     entrypoint: sh
+#     waitFor: ['Approval Prod']
+
+# options:
+#   logging: CLOUD_LOGGING_ONLY
