@@ -1,7 +1,7 @@
 resource "kubernetes_service_account" "k8s_service_account" {
   metadata {
     name      = "kubernetes-${var.service_account_name}"
-    namespace = kubernetes_namespace.default.metadata[0].name
+    namespace = var.namespace
     annotations = {
       "iam.gke.io/gcp-service-account" = google_service_account.gsa.email
     }

@@ -63,11 +63,11 @@ resource "google_container_cluster" "gke-cluster-nonprod" {
 
 }
 
-resource "kubernetes_namespace" "default" {
-  metadata {
-    name = var.namespace
-  }
-}
+# resource "kubernetes_namespace" "default" {
+#   metadata {
+#     name = var.namespace
+#   }
+# }
 
 # resource "kubernetes_service_account" "my_service_account" {
 #   metadata {
