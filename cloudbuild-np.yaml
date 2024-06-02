@@ -62,19 +62,6 @@ steps:
         echo "Listing contents of /workspace/gke-terraform:"
         ls -lrth /workspace/gke-terraform/nonprod/terraform
     entrypoint: sh  
-
-  # Get GKE cluster credentials
-  - name: 'gcr.io/cloud-builders/gcloud'
-    args:
-      - 'container'
-      - 'clusters'
-      - 'get-credentials'
-      - '${_CLUSTER_NAME}'
-      - '--zone'
-      - '${_CLUSTER_ZONE}'
-      - '--project'
-      - '${_PROJECT_ID}'
-    id: 'Get GKE Credentials'
   
   # Initialize Terraform in Nonprod
   - name: 'hashicorp/terraform:1.0.0'

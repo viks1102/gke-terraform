@@ -26,5 +26,4 @@ variable "service_account_name" {
 variable "namespace" {
   description = "The namespace for the Kubernetes service account"
   type        = string
-  default     = "default"
 }
