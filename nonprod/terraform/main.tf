@@ -32,7 +32,7 @@ resource "google_container_cluster" "gke-cluster-nonprod" {
   }
 
   workload_identity_config {
-    identity_namespace = "${var.project_id}.svc.id.goog"
+    workload_pool = "${var.project_id}.svc.id.goog"
   }
 
   ip_allocation_policy {

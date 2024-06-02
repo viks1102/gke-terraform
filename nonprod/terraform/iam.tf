@@ -14,6 +14,7 @@ resource "google_service_account" "gsa" {
 }
 
 resource "google_project_iam_binding" "workload_identity_user" {
+  project = var.project_id  
   role    = "roles/iam.workloadIdentityUser"
   members = [
     "serviceAccount:${var.project_id}.svc.id.goog[${var.namespace}/${var.service_account_name}]"
